@@ -33,7 +33,8 @@ TCLife.prototype = {
 		//边界值
 		var bound = {
 			left:0 ,//左边界值
-			right:initDistance>0?0:initDistance  //右边界值
+			right:initDistance>0?0:initDistance,  //右边界值
+			count:0 //几个手指在屏幕上start
 		} ;
 
 		var TAG = {
@@ -52,6 +53,8 @@ TCLife.prototype = {
 			pos.transX = outer.getBoundingClientRect().left ; //transform 的 translateX值
 
 			TAG.startTime = new Date() * 1 ;
+			// 几个手指   count就是几
+			TAG.count ++ ;
 		};
 
 		//手指移动的处理事件
@@ -92,8 +95,14 @@ TCLife.prototype = {
 		var endHandler = function(e){
 			e.preventDefault();
 			$(outer).addClass('swiper-trans') ;
+			// 几个手指   count就是几
+			TAG.count--;
 
-			
+			//count > 0 证明还有 手指 在上面，后续 不执行
+			if(TAG.count > 0){
+				return;
+			}
+
 			if(Math.abs(TAG.speed)>40){
 				pos.transX += 0.168*TAG.speed ;
 			}
