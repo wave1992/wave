@@ -1,7 +1,10 @@
-测试测试测试
+﻿测试测试测试
 我现在修改了这个文件。
 
 wow~
 wow~
 wow~
 第三次修改了
+
+微信公众平台 sdk
+http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E6.89.B9.E9.87.8F.E9.9A.90.E8.97.8F.E5.8A.9F.E8.83.BD.E6.8C.89.E9.92.AE.E6.8E.A5.E5.8F.A3
