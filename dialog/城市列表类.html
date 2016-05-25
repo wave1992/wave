@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<button class="clickMe">点击我看看</button>
+<script src="http://cdn.bootcss.com/jquery/1.12.0/jquery.js"></script>
+<script src="http://cdn.bootcss.com/underscore.js/1.8.2/underscore-min.js"></script>
+    <script>
+
+(function($) { 
+
+var school_tmpl = '<div class="schoolpicker-wrap">' + 
+                '<div class="school-picker-header "><h3>请选择学校</h3>' + 
+                '<button class="schoolpicker-btn-close" >×</button></div>' + 
+                '<div class="school-picker-body">' + 
+                '<%_.each(data, function(univs,selfName){%>' + 
+                '<div class="schoolpicker-panel">' + 
+                '<div class="schoolpicker-panel-heading">' + 
+                '<span class="schoolpicker-vtitle vicon-minus">-</span>' + 
+                '<label>' + 
+                '<input class="input school-provs" type="checkbox" name="initial_name" value="<%=selfName%>" ' + 
+                'target_name="<%=selfName%>"/>' + 
+                '<span class="prospan"><%=selfName%></span>' + 
+                '</label>' + 
+                '</div>' + 
+                '<div class="schoolpicker-panel-body">' + 
+                '<%_.each(univs, function(univ){%>' + 
+                '<div class="school-name">' + 
+                '<label>' + 
+                '<input class="input" type="checkbox" name="univ_name" value="<%=univ.id%>"' + 
+                'target_name="<%=univ.name%>"/>' + 
+                '<span><%=univ.name%></span>' + 
+                '</label>' + 
+                '</div>' + 
+                '<%});%>' + 
+                '</div>' + 
+                '</div>' + 
+                '<%});%>' + 
+                '</div>' + 
+                '<div class="school-picker-footer">' + 
+                '<button class="btn schoolpicker-btn-selall type="button" style="margin-right:10px">全选</button>' + 
+                '<button class="btn schoolpicker-btn-sure" type="button">确定</button>' + 
+                '</div>' + 
+                '</div>' + 
+                '<div class="schoolpicker-cover"></div>'; 
+
+
+var schoolpickercss = "<style>" + 
+                    ".schoolpicker-wrap{width:655px;background:#fff;margin: 0 auto;border-radius: 4px;-moz-border-radius:4px;-webkit-border-radius:4px;position: absolute;" + 
+                    "z-index:1040;}" + 
+                    ".clear{clear: both}" + 
+                    "#schooltext{width:200px;height:100px}" + 
+                    ".school-picker-header{border-radius:6px 6px 0 0 ;overflow: hidden;padding: 0 12px;" + 
+                    "border-bottom: 1px solid #ddd;" + 
+                    "}" + 
+                    ".school-picker-header h3{float: left;line-height: 20px;}" + 
+                    ".school-picker-header .schoolpicker-btn-close{float: right;cursor:pointer;border: 0;background: transparent;margin-top:17px;font-size: 20px;font-weight: bold;" + 
+                    "line-height: 20px;-webkit-appearance: none;text-shadow: 0 1px 0 #fff}" + 
+                    ".school-picker-header .schoolpicker-btn-close:hover{background: #f5f5f5;}" + 
+                    ".school-picker-footer{" + 
+                    "overflow:hidden;padding:10px 15px;text-align: right;background-color: #f5f5f5;border-top: 1px solid #ddd;-webkit-border-radius: 0 0 6px 6px;" + 
+                    "-moz-border-radius: 0 0 6px 6px;" + 
+                    "border-radius: 0 0 6px 6px;" + 
+                    "-webkit-box-shadow: inset 0 1px 0 #fff;" + 
+                    "-moz-box-shadow: inset 0 1px 0 #fff;" + 
+                    "box-shadow: inset 0 1px 0 #fff;" + 
+                    "}" + 
+                    ".schoolpicker-panel{" + 
+                    "background-color: #fff;border: 1px solid #ddd;border-radius: 4px;margin: 10px 0;-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);" + 
+                    "box-shadow: 0 1px 1px rgba(0,0,0,0.05); " + 
+                    "}" + 
+                    ".schoolpicker-panel-heading {" + 
+                    "font-size: 14px;padding: 10px;border-bottom: 1px solid transparent;border-top-left-radius:3px;border-top-right-radius:3px;color: #333;" + 
+                    "background-color: #f5f5f5;" + 
+                    "border-color: #ddd;font-weight: bold;overflow: hidden;" + 
+                    "}" + 
+                    ".schoolpicker-panel-heading .vicon-minus{float:right;display:block;width:20px;height:20px;font-size: 20px;text-align: center;}" + 
+                    ".schoolpicker-panel-heading input{float: left;}" + 
+                    ".schoolpicker-panel-heading .prospan{float:left;margin-top:1px}" + 
+                    ".schoolpicker-panel-heading .vicon-minus:hover{background-color: #fff;cursor: pointer;}" + 
+                    ".school-picker-body{height:500px;overflow: auto;padding:0 12px;}" + 
+                    ".schoolpicker-panel-body {" + 
+                    "font-size: 12px;overflow:hidden;padding: 15px;word-wrap : break-word;word-break : break-all;" + 
+                    "}" + 
+                    ".schoolpicker-panel-body .school-name{float: left;width:280px;padding-left:10px;vertical-align: middle;margin-bottom: 5px}" + 
+                    ".schoolpicker-panel-body .school-name input{float: left;}" + 
+                    ".schoolpicker-panel-body .school-name span{float:left;margin-top: 2px}" + 
+                    ".schoolpicker-btn-sure{float:right}" + 
+                    ".schoolpicker-cover {" + 
+                    "position:fixed; top: 0px; right:0px; bottom:0px;filter: alpha(opacity=80); background-color: #000;" + 
+                    "z-index: 1002; left: 0px;" + 
+                    "opacity:0.8; -moz-opacity:0.8;" + 
+                    "}</style>"; 
+
+var template = _.template(school_tmpl); 
+$("head").append(schoolpickercss); 
+
+var schoollist = null;
+var data = 
+        {
+            'univs': [
+                {"id":1,"name":'haha1'},
+                {"id":2,"name":'haha2'},
+                {"id":3,"name":'haha3'},
+                {"id":4,"name":'haha4'},
+                {"id":5,"name":'haha5'}
+            ],
+            'initial': [
+                {"id":1,"name":'haha1'},
+                {"id":2,"name":'haha2'},
+                {"id":3,"name":'haha3'},
+                {"id":4,"name":'haha4'},
+                {"id":5,"name":'haha5'}
+            ],
+            'initial2': [
+                {"id":1,"name":'haha1'},
+                {"id":2,"name":'haha2'},
+                {"id":3,"name":'haha3'},
+                {"id":4,"name":'haha4'},
+                {"id":5,"name":'haha5'}
+            ]
+        }
+schoollist = data;
+// $.ajax({ 
+// type: "get",
+// url: "http://xiaoyouapp.com/univ/picker?callback=?",
+// async: false,
+// dataType: "jsonp",
+// "success": function(data) {
+    
+    
+//     schoollist = data;
+// }
+// }); 
+
+function School(curdom) { 
+    this.dialog = null;
+    this.curdom = $(curdom);
+} 
+School.prototype = { 
+    init: function() {
+        this.render();
+        this.eve();         
+    }, 
+    render: function() { 
+
+        var html = template({
+            data: schoollist
+        }); 
+        this.dialog = $(html);
+        $("body").append(this.dialog);
+    }, 
+    pos: function() { 
+        var left = ($(window).width() - 665) / 2;
+        this.dialog.find(".school-picker-body").height($(window).height() - 80 - 100);
+        $(".schoolpicker-wrap").css({
+        "left": left + "px",
+        "top": 40 + "px"
+        });
+    }, 
+    show: function() { 
+        this.pos();
+        this.dialog.show();
+    }, 
+    hide: function() { 
+        $(this.dialog).hide();
+    }, 
+    eve: function() { 
+        var _this = this;
+        var btn_sure = this.dialog.find(".schoolpicker-btn-sure");
+        var btn_close = this.dialog.find(".schoolpicker-btn-close");
+        var btn_selall = this.dialog.find(".schoolpicker-btn-selall");
+        var check_city = this.dialog.find(".school-provs");
+        var v_minus = this.dialog.find(".vicon-minus");
+        var v_title = this.dialog.find(".schoolpicker-vtitle");
+        $(btn_sure).on('click', function() {
+                _this.setvalue();
+            _this.hide();
+        }); 
+        $(btn_close).on('click', function(e) { 
+            e.stopPropagation();
+            _this.hide();
+        }); 
+        $(btn_selall).on('click', function(e) { 
+            e.stopPropagation();
+            _this.allunivs(this);
+        }); 
+        $(check_city).on('click', function(e) { 
+            e.stopPropagation();
+            _this.someunivs(this);
+        }); 
+        $(v_title).on('click', function(e) { 
+            e.stopPropagation();
+            _this.collapse(this);
+        });
+        }, 
+        collapse: function(own) { 
+            var index=this.dialog.find(".schoolpicker-vtitle").index(own);
+            var isminus = $(own).hasClass("vicon-plus");
+            if (!isminus) {
+                $(own).addClass("vicon-plus").html("+");
+                this.dialog.find(".schoolpicker-panel-body").eq(index).slideUp("fast");
+            } else { 
+                $(own).removeClass("vicon-plus").html("-");
+                this.dialog.find(".schoolpicker-panel-body").eq(index).slideDown("fast");
+            }
+        }, 
+        someunivs: function(own) { 
+            var index = this.dialog.find(".school-provs").index(own);
+            var isChecked = $(own).is(":checked");
+            var schoolNames = this.dialog.find(".schoolpicker-panel-body").eq(index).find(".school-name input");
+            schoolNames.prop("checked", isChecked);
+        }, 
+        allunivs: function(own) { 
+            var isChecked = $(own).hasClass("y");
+            var schoolNames = this.dialog.find(".schoolpicker-panel-body .school-name input");
+            if (isChecked) {
+                $(own).removeClass("y");
+            } else {
+                $(own).addClass("y");
+            } 
+            this.dialog.find(".school-provs").prop("checked", !isChecked);
+            schoolNames.prop("checked", !isChecked);
+        }, 
+        setvalue: function() { 
+            var arrschool = [];
+            $.each(this.dialog.find("input[name='univ_name']:checked"), function(i, v) {
+                 arrschool.push($(v).attr("target_name"));
+            })
+            this.curdom.val(arrschool.join(','));
+        } 
+    } 
+    $.fn.schoolpicker = function() { 
+        $(this).on('click', function() {
+            var data = $(this).data('schoolpicker');
+            if (!data) {
+                var data = new School(this);
+                $(this).data('schoolpicker', data);
+                data.init();
+            }
+            data.show();
+        })
+        return this;
+    } 
+})(jQuery) 
+
+
+
+$('.clickMe').schoolpicker()
+</script>
+</body>
+</html>
