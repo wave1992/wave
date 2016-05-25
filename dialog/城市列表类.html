@@ -99,23 +99,22 @@ var template = _.template(school_tmpl);
 $("head").append(schoolpickercss); 
 
 var schoollist = null;
-var data = 
-        {
-            'univs': [
+var data = {
+            '省份1': [
                 {"id":1,"name":'haha1'},
                 {"id":2,"name":'haha2'},
                 {"id":3,"name":'haha3'},
                 {"id":4,"name":'haha4'},
                 {"id":5,"name":'haha5'}
             ],
-            'initial': [
+            '省份2': [
                 {"id":1,"name":'haha1'},
                 {"id":2,"name":'haha2'},
                 {"id":3,"name":'haha3'},
                 {"id":4,"name":'haha4'},
                 {"id":5,"name":'haha5'}
             ],
-            'initial2': [
+            '省份3': [
                 {"id":1,"name":'haha1'},
                 {"id":2,"name":'haha2'},
                 {"id":3,"name":'haha3'},
@@ -124,18 +123,6 @@ var data =
             ]
         }
 schoollist = data;
-// $.ajax({ 
-// type: "get",
-// url: "http://xiaoyouapp.com/univ/picker?callback=?",
-// async: false,
-// dataType: "jsonp",
-// "success": function(data) {
-    
-    
-//     schoollist = data;
-// }
-// }); 
-
 function School(curdom) { 
     this.dialog = null;
     this.curdom = $(curdom);
