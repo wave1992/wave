@@ -46,6 +46,8 @@ TCLife.prototype = {
 			count:0
 		} ;
 
+		var touchstatus = "" ;
+
 		//手指按下的处理事件
 		var startHandler = function(e){
 			$(outer).removeClass('swiper-trans') ;
@@ -61,9 +63,12 @@ TCLife.prototype = {
 			
 			pos.lastY = pos.currentY = pos.initY = e.touches[0].pageY; 
 
+			touchstatus = "" ;
+
 		};
 		var swipeDirection = function(x1, x2, y1, y2){
-		    var xDis = Math.abs(x1 - x2), yDis = Math.abs(y1 - y2)
+		    var xDis = Math.abs(x1 - x2), yDis = Math.abs(y1 - y2);
+		    
 	        return xDis >= yDis ? (x1 - x2 > 0 ? 'left' : 'right') : (y1 - y2 > 0 ? 'up' : 'down')
 	  	};
 		//手指移动的处理事件
@@ -76,54 +81,63 @@ TCLife.prototype = {
 
 
 			var str = swipeDirection(pos.initX,pos.currentX,pos.initY,pos.currentY);
-			if((str == 'left' || str == 'right') && !this.noMove){
-				e.preventDefault();
 
-				pos.perDiffX = pos.currentX - pos.lastX ;
-				pos.lastX = pos.currentX ;
-					// touchmove 超过边界，滑动距离 按比率减少，变成弹力效果
-				if(pos.transX>=bound.left){
-					pos.perDiffX *= 2*self.scaleW/(pos.viewX+pos.transX*100) ;
+			if(touchstatus==""){
+				if(str == 'left' || str == 'right'){
+					touchstatus= "swipe";
+				}else{
+					touchstatus= "scroll";
 				}
-
-				if(pos.transX <= bound.right){
-					pos.perDiffX *= 2*self.scaleW/(pos.viewX +(bound.right - pos.transX)*100) ;
-
-				}
-
-				pos.transX += pos.perDiffX ;
-
-				$(outer).removeClass('swiper-trans') ;
-
-				outer.style.transform = 'translate('+ pos.transX +'px,0)';
-				outer.style.webkitTransform = 'translate('+ pos.transX +'px,0)';
-
-				// 计算速度
-				TAG.endTime = new Date()*1 ;
-				TAG.speed = pos.perDiffX / (TAG.endTime - TAG.startTime)*1000 ;
-				TAG.startTime = TAG.endTime ;
-			}else{
-				this.noMove = true;
-				pos.perDiffX = 0;
 			}
-		
+			if(touchstatus!= "swipe"){
+				// e.preventDefault();
+				return ;
+			}
+			e.preventDefault();
+	
+			pos.perDiffX = pos.currentX - pos.lastX ;
+			pos.lastX = pos.currentX ;
+				// touchmove 超过边界，滑动距离 按比率减少，变成弹力效果
+			if(pos.transX>=bound.left){
+				pos.perDiffX *= 2*self.scaleW/(pos.viewX+pos.transX*100) ;
+			}
 
+			if(pos.transX <= bound.right){
+				pos.perDiffX *= 2*self.scaleW/(pos.viewX +(bound.right - pos.transX)*100) ;
+
+			}
+
+			pos.transX += pos.perDiffX ;
+
+			$(outer).removeClass('swiper-trans') ;
+
+			outer.style.transform = 'translate('+ pos.transX +'px,0)';
+			outer.style.webkitTransform = 'translate('+ pos.transX +'px,0)';
+
+			// 计算速度
+			TAG.endTime = new Date()*1 ;
+			TAG.speed = pos.perDiffX / (TAG.endTime - TAG.startTime)*1000 ;
+			TAG.startTime = TAG.endTime ;
 
 		};
 
 		//手指抬起的处理事件
 		var endHandler = function(e){
-			e.preventDefault();
-			this.noMove = false;
 			TAG.count--;
+
+			if(touchstatus!= "swipe"){
+				return ;
+			}
+
+			e.preventDefault();
 
 			if(TAG.count>0){
 				return;
 			}
-
 			$(outer).addClass('swiper-trans') ;
 
-			if(Math.abs(TAG.speed)>40){
+				
+			if(Math.abs(TAG.speed)>100){
 				pos.transX += 0.168*TAG.speed ;
 			}
 			// touchend,超边界。 回到边界值
@@ -135,6 +149,7 @@ TCLife.prototype = {
 			if(pos.transX<=bound.right){
 				pos.transX = bound.right ;
 			}
+
 			outer.style.transform = 'translate('+pos.transX+'px,0)' ;
 			outer.style.webkitTransform = 'translate('+pos.transX+'px,0)' ;
 
