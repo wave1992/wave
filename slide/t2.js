@@ -8,7 +8,7 @@ TCLife.prototype = {
 	* 初始化方法
 	*/
 	init:function(){
-		this.bindSwipe();
+		this.bindSwipe(this.outer);
 	},
 
 	/**
@@ -62,7 +62,6 @@ TCLife.prototype = {
 			pos.lastY = pos.currentY = pos.initY = e.touches[0].pageY; 
 
 		};
-		//上下滑动还是 左右滑动
 		var swipeDirection = function(x1, x2, y1, y2){
 		    var xDis = Math.abs(x1 - x2), yDis = Math.abs(y1 - y2)
 	        return xDis >= yDis ? (x1 - x2 > 0 ? 'left' : 'right') : (y1 - y2 > 0 ? 'up' : 'down')
@@ -72,47 +71,50 @@ TCLife.prototype = {
 
 			//计算手指X方向的偏移量
 			pos.currentY = e.touches[0].pageY ;
-			
+
 			pos.currentX = e.touches[0].pageX ;
 
-			pos.perDiffX = pos.currentX - pos.lastX ;
-
-			pos.lastX = pos.currentX ;
 
 			var str = swipeDirection(pos.initX,pos.currentX,pos.initY,pos.currentY);
-			if(str == 'left' || str == 'right'){
+			if((str == 'left' || str == 'right') && !this.noMove){
 				e.preventDefault();
+
+				pos.perDiffX = pos.currentX - pos.lastX ;
+				pos.lastX = pos.currentX ;
+					// touchmove 超过边界，滑动距离 按比率减少，变成弹力效果
+				if(pos.transX>=bound.left){
+					pos.perDiffX *= 2*self.scaleW/(pos.viewX+pos.transX*100) ;
+				}
+
+				if(pos.transX <= bound.right){
+					pos.perDiffX *= 2*self.scaleW/(pos.viewX +(bound.right - pos.transX)*100) ;
+
+				}
+
+				pos.transX += pos.perDiffX ;
+
+				$(outer).removeClass('swiper-trans') ;
+
+				outer.style.transform = 'translate('+ pos.transX +'px,0)';
+				outer.style.webkitTransform = 'translate('+ pos.transX +'px,0)';
+
+				// 计算速度
+				TAG.endTime = new Date()*1 ;
+				TAG.speed = pos.perDiffX / (TAG.endTime - TAG.startTime)*1000 ;
+				TAG.startTime = TAG.endTime ;
+			}else{
+				this.noMove = true;
+				pos.perDiffX = 0;
 			}
+		
 
-			// touchmove 超过边界，滑动距离 按比率减少，变成弹力效果
-			if(pos.transX>=bound.left){
-				pos.perDiffX *= 2*self.scaleW/(pos.viewX+pos.transX*100) ;
-			}
 
-			if(pos.transX <= bound.right){
-				pos.perDiffX *= 2*self.scaleW/(pos.viewX +(bound.right - pos.transX)*100) ;
-
-			}
-
-			pos.transX += pos.perDiffX ;
-
-			$(outer).removeClass('swiper-trans') ;
-
-			// self.outer.style.transform = 'translate('+ pos.transX +'px,0)';
-			// self.outer.style.webkitTransform = 'translate('+ pos.transX +'px,0)';
-			outer.style.transform = 'translate('+ pos.transX +'px,0)';
-			outer.style.webkitTransform = 'translate('+ pos.transX +'px,0)';
-
-			// 计算速度
-			TAG.endTime = new Date()*1 ;
-			TAG.speed = pos.perDiffX / (TAG.endTime - TAG.startTime)*1000 ;
-			TAG.startTime = TAG.endTime ;
 		};
 
 		//手指抬起的处理事件
 		var endHandler = function(e){
 			e.preventDefault();
-
+			this.noMove = false;
 			TAG.count--;
 
 			if(TAG.count>0){
@@ -144,7 +146,6 @@ TCLife.prototype = {
 		outer.addEventListener('touchend', endHandler,false);
 		outer.addEventListener('touchcancel', endHandler,false);
 	}
-
 
 
 
