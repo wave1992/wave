@@ -63,7 +63,6 @@ TCLife.prototype = {
 			
 			pos.lastY = pos.currentY = pos.initY = e.touches[0].pageY; 
 
-			touchstatus = "" ;
 
 		};
 		var swipeDirection = function(x1, x2, y1, y2){
@@ -126,6 +125,9 @@ TCLife.prototype = {
 			TAG.count--;
 
 			if(touchstatus!= "swipe"){
+				if(TAG.count==0){
+					touchstatus = "" ;
+				}
 				return ;
 			}
 
@@ -134,6 +136,10 @@ TCLife.prototype = {
 			if(TAG.count>0){
 				return;
 			}
+
+			touchstatus = "" ;
+			
+
 			$(outer).addClass('swiper-trans') ;
 
 				
