@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="screen-orientation" content="portrait">
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-page-mode" content="app">
+	<!-- QQ强制竖屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	
+	<title>疯狂打地鼠</title>
+	
+	<script src="./js/flexible.min.js"></script>
+	
+    <link rel="stylesheet" href="./css/wx-game.css">
+
+	<style>
+		.init-show{position:absolute;z-index:1000;top:0;left:0;bottom:0;right:0;background-color:#9cd727}.init-show p{position:fixed;width:100%;text-align:center;margin:0 auto;font-size:.42666667rem;color:#d38b46}.init-show .char{top:50%;margin-top:-0.8rem}.init-show .percent{top:50%;margin-top:-0.4rem}
+	</style>
+	<script>
+		
+	</script>
+</head>
+<body>
+	<section class="init-show">
+		<p class="char">游戏加载中</p>
+		<p id="sourInit" class="percent">0%</p>
+	</section>
+	<section class="start-box">
+		<div class="start-cover"></div>
+		<div class="game-start">
+			<em class="start-icon"></em>
+			Play
+		</div>
+	</section>
+	
+	<section class="sky-box">
+		<div class="wood-box">
+			<div class="highscore-box">
+				<label for="" class="label-tip">最高分数</label>
+				<div class="frame highscore">
+					<p class="inside">0</p>
+					<em class="icon-left"></em>
+				</div>
+			</div>
+			<div class="score-box">
+				<!-- <label for="" class="label-tip label-score">score</label> -->
+				<div class="middle">
+					打地鼠
+				</div>
+			</div>
+			<div class="restnum-box">
+				<label for="" class="label-tip">分数</label>
+				<div class="frame restnum">
+					<p class="score wx-score">0</p>
+					<em class="icon-right"></em>
+				</div>
+			</div>
+		</div>
+		<div class="time-box">
+			<div class="progress-bar"></div>
+			<div class="time">00:30</div>
+		</div>
+	</section>
+	<section class="line-box part1">
+		<div class="hole-box hole1">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+		<div class="hole-box hole2">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+	</section>
+	<section class="line-box part2">
+		<div class="hole-box hole3">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+		<div class="hole-box hole4">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+	</section>
+	<section class="line-box part3">
+		<div class="hole-box hole5">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+		<div class="hole-box hole6">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+		<div class="hole-box hole7">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse "></div>
+			</div>
+		</div>
+	</section>
+	<section class="line-box part4">
+		<div class="hole-box hole8">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse"></div>
+			</div>
+		</div>
+		<div class="hole-box hole9">
+			<p class="icon-plus"></p>
+			<div class="mouse-box">
+				<div class="mouse"></div>
+			</div>
+		</div>
+	</section>
+	<section class="line-box control-box">
+		
+	</section>
+	
+	<div class="button-box">
+		
+		<div class="sound"></div>
+		<audio class="bg-sound" loop="loop" >
+		
+			<source src="./sound/Fever.mp3?cachevers=1" type="audio/mpeg" />
+			您的手机不支持背景音乐噢
+		</audio>
+	</div>
+	<!-- <div class="pointer"></div> -->
+		<audio class="hit-sound">
+			<source src="./sound/a.mp3?cachevers=1" type="audio/mpeg" />
+			您的手机不支持背景音乐噢
+		</audio>
+	<div class="cover"></div>
+	<p class="attention">注意！大批地鼠来袭！</p>
+
+	
+
+<section class="dialog tc">
+	<div class="title"></div>
+	<em class="close"></em>
+	<p class="cxt"></p>
+	<div class="btn-box"></div>
+</section>
+
+	<script src="./js/zepto.min.js"></script>
+	<script src="./js/wx-game.js"></script>
+</body>
+</html>
